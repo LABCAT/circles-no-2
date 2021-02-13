@@ -1,4 +1,4 @@
-const notes = [
+const cueSet1 = [
     {
         "duration": 0.666666,
         "durationTicks": 15360,
@@ -847,4 +847,4 @@ const notes = [
     }
 ];
 
-export default notes;
+export default cueSet1;

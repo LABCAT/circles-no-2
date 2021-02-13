@@ -5,7 +5,8 @@ import './globals';
 import "p5/lib/addons/p5.sound";
 import * as p5 from "p5";
 import audio from '../audio/circles-no-2.mp3'
-import notes from './notes.js'
+import cueSet1 from './cueSet1.js'
+import cueSet2 from './cueSet2.js'
 
 const P5Sketch = () => {
     const Sketch = p => {
@@ -18,19 +19,34 @@ const P5Sketch = () => {
 
         p.song = null;
 
-        p.cuesCompleted = [];
-
         p.circles = [];
+
+        p.hue = 0;
+
+        p.cueSet1Completed = [];
+
+        p.cueSet2Completed = [];
+
+
+        p.preload = () => {
+            p.song = p.loadSound(audio);
+        }
 
         p.setup = () => {
             p.canvas = p.createCanvas(p.canvasWidth, p.canvasHeight);
             p.colorMode(p.HSB, 360, 100, 100, 100);
             p.background(0);
             p.strokeWeight(5);
-            p.song = p.loadSound(audio);
+
+            p.hue = p.random(360);
             p.song.onended(p.logCredits);
-            for(let i = 0; i < notes.length; i++){
-                p.song.addCue(notes[i].time, p.executeCue, (i + 1));
+
+            for(let i = 0; i < cueSet1.length; i++){
+                p.song.addCue(cueSet1[i].time, p.executeCueSet1, (i + 1));
+            }
+
+            for(let i = 0; i < cueSet2.length; i++){
+                p.song.addCue(cueSet2[i].time, p.executeCueSet2, (i + 1));
             }
         };
 
@@ -50,14 +66,38 @@ const P5Sketch = () => {
             }
         };
 
-        p.executeCue = (currentCue) => {
-            if (!p.cuesCompleted.includes(currentCue)){
-                p.cuesCompleted.push(currentCue);
-                const hue = currentCue < 1 ? 0 :((currentCue % 24) * 15);
-                p.circles.push(new Circle(p, p.canvasWidth / 2, p.canvasHeight / 2, 10, hue));
+        p.executeCueSet1 = (currentCue) => {
+            if (!p.cueSet1Completed.includes(currentCue)){
+                p.cueSet1Completed.push(currentCue);
+                p.hue = p.hue + 15;
+                p.hue = (p.hue > 360) ? (p.hue - 360) : p.hue;
+                const lifeSpan = currentCue <= 56 ? p.canvasWidth/4 : p.canvasWidth/2;
+                p.circles.push(new Circle(p, p.canvasWidth / 2, p.canvasHeight / 2, 10, p.hue, lifeSpan));
             }
         }
 
+        p.executeCueSet2= (currentCue) => {
+            if (!p.cueSet2Completed.includes(currentCue)){
+                p.cueSet2Completed.push(currentCue);
+                const size = 10;
+                let hue = p.random(360);
+                p.circles.push(new Circle(p, (size * 4), (size * 4), size, hue, p.canvasWidth / 12, false));
+                p.random(360);
+                p.circles.push(new Circle(p, (size * 4), p.canvasHeight - (size * 4), size, hue, p.canvasWidth / 12, false));
+                p.random(360);
+                p.circles.push(new Circle(p, p.canvasWidth - (size * 4), (size * 4), size, hue, p.canvasWidth / 12, false));
+                p.random(360);
+                p.circles.push(new Circle(p, p.canvasWidth - (size * 4), p.canvasHeight - (size * 4), size, hue, p.canvasWidth / 12, false));
+            }
+        }
+
+        p.executeCueSet3= (currentCue) => {
+            if (!p.cueSet3Completed.includes(currentCue)){
+                p.cueSet3Completed.push(currentCue);
+                const hue = p.random(360);
+                p.circles.push(new Circle(p, (p.canvasWidth / 8) * 7, (p.canvasHeight / 4) * 3, 10, p.hue, p.canvasWidth / 16, false));
+            }
+        }
 
         p.mousePressed = () => {
             if (p.song.isPlaying()) {
