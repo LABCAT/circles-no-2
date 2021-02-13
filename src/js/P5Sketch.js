@@ -27,7 +27,6 @@ const P5Sketch = () => {
 
         p.cueSet2Completed = [];
 
-
         p.preload = () => {
             p.song = p.loadSound(audio);
         }
@@ -131,8 +130,10 @@ const P5Sketch = () => {
         p.reset = () => {
             p.clear();
             p.background(0);
-            p.cuesCompleted = [];
             p.circles = [];
+            p.cueSet1Completed = [];
+            p.cueSet2Completed = [];
+            p.hue = p.random(360);
         };
 
         p.updateCanvasDimensions = () => {
