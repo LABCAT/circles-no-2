@@ -4,7 +4,7 @@ import Circle from './Circle.js';
 import './globals';
 import "p5/lib/addons/p5.sound";
 import * as p5 from "p5";
-import audio from '../audio/circles-no-2.mp3'
+import audio from '../audio/circles-no-2.ogg'
 import cueSet1 from './cueSet1.js'
 import cueSet2 from './cueSet2.js'
 
@@ -93,7 +93,6 @@ const P5Sketch = () => {
         p.executeCueSet3= (currentCue) => {
             if (!p.cueSet3Completed.includes(currentCue)){
                 p.cueSet3Completed.push(currentCue);
-                const hue = p.random(360);
                 p.circles.push(new Circle(p, (p.canvasWidth / 8) * 7, (p.canvasHeight / 4) * 3, 10, p.hue, p.canvasWidth / 16, false));
             }
         }
